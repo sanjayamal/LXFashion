@@ -1,68 +1,305 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@import "tailwindcss";
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+/* ── Theme variables (swap via data-theme attribute) ── */
+:root,
+[data-theme="dark"] {
+  --t-bg: #0a0a0a;
+  --t-bg-alt: #0f0f0f;
+  --t-surface: #171717;
+  --t-surface-hi: #1f1f1f;
+  --t-text: #fafafa;
+  --t-text-muted: #a0a0a0;
+  --t-text-faint: #6b6b6b;
+  --t-text-dimmed: #404040;
+  --t-input-bg: rgba(15, 15, 15, 0.8);
+  --t-nav-bg: rgba(10, 10, 10, 0.9);
+  --t-nav-blur-bg: rgba(10, 10, 10, 0.95);
+  --t-card-from: rgba(23, 23, 23, 0.8);
+  --t-card-to: rgba(15, 15, 15, 0.9);
+  --t-card-hover-from: rgba(30, 30, 30, 0.9);
+  --t-card-hover-to: rgba(20, 20, 20, 0.95);
+  --t-overlay-strong: rgba(10, 10, 10, 0.7);
+  --t-overlay-soft: rgba(10, 10, 10, 0.6);
+  --t-radial-end: #0a0a0a;
+  --t-scrollbar-track: #0a0a0a;
+  --t-selection-text: #0a0a0a;
+  --t-gold-text-gradient: linear-gradient(135deg, #d4af37 0%, #f5e6a3 30%, #d4af37 60%, #aa8c2c 80%, #d4af37 100%);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+[data-theme="light"] {
+  --t-bg: #faf9f6;
+  --t-bg-alt: #f5f3ef;
+  --t-surface: #ffffff;
+  --t-surface-hi: #f0ede8;
+  --t-text: #1a1a1a;
+  --t-text-muted: #5c5c5c;
+  --t-text-faint: #8a8a8a;
+  --t-text-dimmed: #b0b0b0;
+  --t-input-bg: rgba(255, 255, 255, 0.9);
+  --t-nav-bg: rgba(250, 249, 246, 0.9);
+  --t-nav-blur-bg: rgba(250, 249, 246, 0.95);
+  --t-card-from: rgba(255, 255, 255, 0.9);
+  --t-card-to: rgba(245, 243, 239, 0.95);
+  --t-card-hover-from: rgba(255, 255, 255, 1);
+  --t-card-hover-to: rgba(250, 248, 244, 1);
+  --t-overlay-strong: rgba(250, 249, 246, 0.7);
+  --t-overlay-soft: rgba(250, 249, 246, 0.6);
+  --t-radial-end: #faf9f6;
+  --t-scrollbar-track: #f5f3ef;
+  --t-selection-text: #1a1a1a;
+  --t-gold-text-gradient: linear-gradient(135deg, #9a7b08 0%, #d4af37 30%, #7c620a 60%, #b8960c 80%, #9a7b08 100%);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+@theme {
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Playfair Display", Georgia, serif;
+
+  --color-gold-50: #fdf8e8;
+  --color-gold-100: #faefc6;
+  --color-gold-200: #f5df8e;
+  --color-gold-300: #ecc94b;
+  --color-gold-400: #d4af37;
+  --color-gold-500: #b8960c;
+  --color-gold-600: #9a7b08;
+  --color-gold-700: #7c620a;
+  --color-gold-800: #5e4a0e;
+  --color-gold-900: #3d3010;
+
+  /* Theme-aware semantic tokens */
+  --color-t-bg: var(--t-bg);
+  --color-t-bg-alt: var(--t-bg-alt);
+  --color-t-surface: var(--t-surface);
+  --color-t-surface-hi: var(--t-surface-hi);
+  --color-t-text: var(--t-text);
+  --color-t-muted: var(--t-text-muted);
+  --color-t-faint: var(--t-text-faint);
+  --color-t-dimmed: var(--t-text-dimmed);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
   }
-  a:hover {
-    color: #747bff;
+
+  html {
+    scroll-behavior: smooth;
   }
-  button {
-    background-color: #f9f9f9;
+
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--t-bg);
+    color: var(--t-text);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    transition: background-color 0.4s ease, color 0.4s ease;
   }
+
+  #root {
+    width: 100%;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-400);
+    color: var(--t-selection-text);
+  }
+}
+
+/* Animations */
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in-down {
+  from { opacity: 0; transform: translateY(-30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes slide-in-left {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slide-in-right {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes border-glow {
+  0%, 100% { border-color: rgba(212, 175, 55, 0.2); }
+  50% { border-color: rgba(212, 175, 55, 0.6); }
+}
+
+@keyframes draw-line {
+  from { width: 0; }
+  to { width: 80px; }
+}
+
+@utility animate-fade-in-up {
+  animation: fade-in-up 0.8s ease both;
+}
+
+@utility animate-fade-in-down {
+  animation: fade-in-down 0.8s ease both;
+}
+
+@utility animate-fade-in {
+  animation: fade-in 1s ease both;
+}
+
+@utility animate-shimmer {
+  animation: shimmer 3s linear infinite;
+}
+
+@utility animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+@utility animate-spin-slow {
+  animation: spin-slow 20s linear infinite;
+}
+
+@utility animate-scale-in {
+  animation: scale-in 0.6s ease both;
+}
+
+@utility animate-slide-in-left {
+  animation: slide-in-left 0.8s ease both;
+}
+
+@utility animate-slide-in-right {
+  animation: slide-in-right 0.8s ease both;
+}
+
+@utility animate-ticker {
+  animation: ticker 30s linear infinite;
+}
+
+@utility animate-border-glow {
+  animation: border-glow 3s ease-in-out infinite;
+}
+
+@utility animate-draw-line {
+  animation: draw-line 1s ease both;
+}
+
+/* Gold gradient text — adapts to theme */
+@utility text-gold-gradient {
+  background: var(--t-gold-text-gradient);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Theme-aware card backgrounds */
+@utility bg-t-card {
+  background: linear-gradient(145deg, var(--t-card-from), var(--t-card-to));
+  transition: background 0.4s ease;
+}
+
+@utility bg-t-card-hover {
+  background: linear-gradient(145deg, var(--t-card-hover-from), var(--t-card-hover-to));
+}
+
+@utility bg-t-input {
+  background: var(--t-input-bg);
+  transition: background 0.4s ease;
+}
+
+@utility bg-t-nav {
+  background: var(--t-nav-bg);
+  transition: background 0.4s ease;
+}
+
+@utility bg-t-nav-blur {
+  background: var(--t-nav-blur-bg);
+  transition: background 0.4s ease;
+}
+
+@utility bg-t-radial {
+  background: radial-gradient(ellipse at center, transparent 0%, var(--t-radial-end) 75%);
+}
+
+@utility bg-t-overlay-strong {
+  background-color: var(--t-overlay-strong);
+}
+
+@utility bg-t-overlay-soft {
+  background-color: var(--t-overlay-soft);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--t-scrollbar-track);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-gold-400);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-300);
+}
+
+/* Theme transition for all themed elements */
+[data-theme] * {
+  transition-property: background-color, color, border-color, box-shadow;
+  transition-duration: 0.3s;
+  transition-timing-function: ease;
+}
+
+/* Prevent animation-related properties from being affected */
+[data-theme] *[class*="animate-"],
+[data-theme] *[class*="transition-transform"],
+[data-theme] *[class*="transition-opacity"],
+[data-theme] *[class*="hover:"] {
+  transition-property: all;
 }
